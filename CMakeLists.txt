@@ -98,6 +98,9 @@ add_executable(hd_manager src/hd_manager.cpp)
 add_dependencies(hd_manager ${PROJECT_NAME}_gencfg)
 target_link_libraries(hd_manager ${catkin_LIBRARIES} hd_motor_controller_lib)
 
+add_executable(set_position src/util/set_position.cpp)
+target_link_libraries(set_position ${catkin_LIBRARIES} hd_motor_controller_lib)
+
 #############
 ## Install ##
 #############
