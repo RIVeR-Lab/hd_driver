@@ -3,7 +3,7 @@
 #include "hd_driver/HDConfig.h"
 #include "device_driver_base/MotorFeedback.h"
 #include "device_driver_base/SetMotorPositionAction.h"
-#include "robot_base_msgs/SoftwareStop.h"
+#include "device_driver_base/SoftwareStop.h"
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/locks.hpp>
 #include <boost/foreach.hpp>
@@ -97,7 +97,7 @@ public:
 	}
 
 
-	void pauseCallback(const robot_base_msgs::SoftwareStop::ConstPtr& msg){
+	void pauseCallback(const device_driver_base::SoftwareStop::ConstPtr& msg){
 		{
 			boost::lock_guard<boost::mutex> lock(controller_mutex);
 			if(msg->stop)
@@ -134,7 +134,7 @@ public:
 	HDManager():controller(new hd_driver::HDMotorController()), is_paused(false), reference_frame_("/hd_reference_frame"), port_("/dev/ttyUSB2"){
 		addDriverStateFunctions(device_driver_state::OPEN, &HDManager::openDevice, &HDManager::closeDevice, this);
 
-		pause_sub = addReconfigurableSubscriber<robot_base_msgs::SoftwareStop>(device_driver_state::RUNNING, "/pause", 1000, boost::bind(&HDManager::pauseCallback, this, _1));
+		pause_sub = addReconfigurableSubscriber<device_driver_base::SoftwareStop>(device_driver_state::RUNNING, "/pause", 1000, boost::bind(&HDManager::pauseCallback, this, _1));
 		feedback_pub = addReconfigurableAdvertise<MotorFeedback>(device_driver_state::RUNNING, "hd_info", 1000);
 		feedback_timer = addReconfigurableTimer<HDManager>(device_driver_state::RUNNING, ros::Duration(0.1), &HDManager::feedbackTimerCallback, this);
 		control_server = addReconfigurableActionServer<SetMotorPositionAction>(device_driver_state::RUNNING, "hd_control", boost::bind(&HDManager::controlCallback, this, _1, _2));

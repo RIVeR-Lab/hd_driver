@@ -8,7 +8,6 @@ find_package(catkin REQUIRED COMPONENTS
   actionlib
   device_driver_base
   geometry_msgs
-  robot_base_msgs
   roscpp
   rospy
   sensor_msgs
@@ -71,7 +70,6 @@ catkin_package(
   actionlib
   device_driver_base
   geometry_msgs
-  robot_base_msgs
   roscpp
   rospy
   sensor_msgs
@@ -91,24 +89,14 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-## Declare a cpp library
-# add_library(hd_driver
-#   src/${PROJECT_NAME}/hd_driver.cpp
-# )
 
-## Declare a cpp executable
- add_executable(hd_manager src/hd_manager.cpp)
+add_library(hd_motor_controller_lib src/hd_motor_controller.cpp)
+target_link_libraries(hd_motor_controller_lib ${catkin_LIBRARIES} hd_motor_controller_lib)
 
-## Add cmake target dependencies of the executable/library
-## as an example, message headers may need to be generated before nodes
-# add_dependencies(hd_driver_node hd_driver_generate_messages_cpp)
+
+add_executable(hd_manager src/hd_manager.cpp)
 add_dependencies(hd_manager ${PROJECT_NAME}_gencfg)
-add_dependencies(hd_manager robot_base_msgs_gencpp)
-
-## Specify libraries to link a library or executable target against
-# target_link_libraries(hd_driver_node
-#   ${catkin_LIBRARIES}
-# )
+target_link_libraries(hd_manager ${catkin_LIBRARIES} hd_motor_controller_lib)
 
 #############
 ## Install ##

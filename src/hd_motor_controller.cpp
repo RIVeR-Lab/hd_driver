@@ -62,7 +62,7 @@ uint32_t HDMotorController::get_trajectory_status(){
   DRIVER_EXCEPT(CorruptDataException, "Error doing "#command", invalid response")
 
 #define parse_ok_or_error(command, buf)		\
-  if(streq("ok", buf))\
+  if(!strcmp("ok", buf))\
     return;\
   parse_error(command , buf)
 
@@ -76,7 +76,7 @@ void HDMotorController::set(memory_bank_t memory_bank, variable_t variable_id, m
   serial_port_.writef(10, "s %c0x%x %d\r", memory_bank, variable_id, value);
   char buf[20];
   serial_port_.read_until(buf, sizeof(buf), '\r', 100);
-  if(streq("ok", buf))
+  if(!strcmp("ok", buf))
     return;
   parse_ok_or_error("set", buf);
 }
@@ -112,7 +112,7 @@ void HDMotorController::set_register(register_t register_id, register_value_t va
   serial_port_.writef(10, "i r%d %d\r", register_id, value);
   char buf[20];
   serial_port_.read_until(buf, sizeof(buf), '\r', 100);
-  if(streq("ok", buf))
+  if(!strcmp("ok", buf))
     return;
   parse_ok_or_error("set_register", buf);
 }
