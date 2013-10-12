@@ -18,6 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
 generate_dynamic_reconfigure_options(
   cfg/HD.cfg
 )
+add_dependencies(${PROJECT_NAME}_gencfg device_driver_base_generate_messages)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
